@@ -20,8 +20,11 @@ from eduka import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.dashboard, name='dashboard'),
-    path('register/', views.register, name='register'),
-    path('login/', views.login, name='login')
+
+    path('', views.register, name='register'),
+    path('login/', views.login, name='login'),
+    path('base/',views.base,name='base'),
+    path('cart/', views.cart, name='cart'),
+    path('index/', views.index, name='index')
 
 ]
