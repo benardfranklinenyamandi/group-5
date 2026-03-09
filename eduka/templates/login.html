@@ -21,7 +21,7 @@
 		  {% csrf_token %}
 		  <h2 class="fw-bold mb-4">Login</h2>
 		  <input type="text" required name="username" placeholder="Huncho" class="form-control mb-3 py-2 bg-light">
-		  <input type="password" required name=" password" placeholder="Password" class="form-control mb-3 py-2 bg-light">
+		  <input type="password" required name="password" placeholder="Password" class="form-control mb-3 py-2 bg-light">
 		  <div class="text-center mb-4">
 			  <a href="{% url 'forgot_password'%}" class="text-decoration-none">Forgot password?</a>
 		  </div>
