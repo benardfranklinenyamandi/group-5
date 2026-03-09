@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static%}
 
 {% block title %}
 Eduka
@@ -6,46 +7,115 @@ Eduka
 {%endblock%}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-3">
-        <div class="card" style="width: 18rem;">
-          <img src="..." class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-            <div class="card" style="width: 18rem;">
-          <img src="..." class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-            <div class="card" style="width: 18rem;">
-          <img src="..." class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-            <div class="card" style="width: 18rem;">
-          <img src="..." class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-    </div>
-</div>
-{% endblock%}
+ <div class="container-fluid p-3">
+        <div class="row g-3">
+
+
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="product-item">
+                    <img src="{% static 'images/BL.png' %}" class="img-fluid" alt="Product">
+                    <div class="product-info">
+                        <p class="mb-2">BLACK LEATHER</p>
+                        <button class="btn btn-yzy">CART</button>
+                        <button class="btn btn-yzy">BUY</button>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="product-item">
+                    <img src="{% static 'images/BGG.png' %}" class="img-fluid" alt="Product">
+                    <div class="product-info">
+                        <p class="mb-2">GREEN BAG</p>
+                        <button class="btn btn-yzy">CART</button>
+                        <button class="btn btn-yzy">BUY</button>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="product-item">
+                    <img src="{% static 'images/BP.png' %}" class="img-fluid" alt="Product">
+                    <div class="product-info">
+                        <p class="mb-2">BLACK BAG</p>
+                        <button class="btn btn-yzy">CART</button>
+                        <button class="btn btn-yzy">BUY</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="product-item">
+                    <img src="{% static 'images/CT.png' %}" class="img-fluid" alt="Product">
+                    <div class="product-info">
+                        <p class="mb-2">BEIGE COAT</p>
+                        <button class="btn btn-yzy">CART</button>
+                        <button class="btn btn-yzy">BUY</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="product-item">
+                    <img src="{% static 'images/JC.png' %}" class="img-fluid" alt="Product">
+                    <div class="product-info">
+                        <p class="mb-2">BLACK JACKET</p>
+                        <button class="btn btn-yzy">CART</button>
+                        <button class="btn btn-yzy">BUY</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="product-item">
+                    <img src="{% static 'images/PKW.png' %}" class="img-fluid" alt="Product">
+                    <div class="product-info">
+                        <p class="mb-2">BLACK&WHITE JACKET</p>
+                        <button class="btn btn-yzy">CART</button>
+                        <button class="btn btn-yzy">BUY</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="product-item">
+                    <img src="{% static 'images/SG.png' %}" class="img-fluid" alt="Product">
+                    <div class="product-info">
+                        <p class="mb-2">SUN GLASSES</p>
+                        <button class="btn btn-yzy">CART</button>
+                        <button class="btn btn-yzy">BUY</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="product-item">
+                    <img src="{% static 'images/SL.png' %}" class="img-fluid" alt="Product">
+                    <div class="product-info">
+                        <p class="mb-2">BOOT LEATHER</p>
+                        <button class="btn btn-yzy">CART</button>
+                        <button class="btn btn-yzy">BUY</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="product-item">
+                    <img src="{% static 'images/SLL.png' %}" class="img-fluid" alt="Product">
+                    <div class="product-info">
+                        <p class="mb-2">YZY SLIDE</p>
+                        <button class="btn btn-yzy">CART</button>
+                        <button class="btn btn-yzy">BUY</button>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="product-item">
+                    <img src="{% static 'images/WD.png' %}" class="img-fluid" alt="Product">
+                    <div class="product-info">
+                        <p class="mb-2">WD JEAN</p>
+                        <button class="btn btn-yzy">CART</button>
+                        <button class="btn btn-yzy">BUY</button>
+                    </div>
+                </div>
+            </div>
+
+{% endblock %}
