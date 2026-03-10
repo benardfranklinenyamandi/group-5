@@ -169,3 +169,7 @@ def reset_password(request , reset_id):
 
 def cart(request):
     return render(request, "cart.html")
+
+
+def account(request):
+    return render(request, "account.html")
