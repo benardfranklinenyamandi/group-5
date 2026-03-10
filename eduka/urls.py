@@ -29,6 +29,11 @@ urlpatterns = [
     path('forgot_password/', views.forgot_password, name='forgot_password'),
     path('logout/',views.logoutview, name='logout'),
     path('password_reset_sent/<str:reset_id>/', views.password_reset_sent, name='password_reset_sent'),
-    path('reset_password<str:reset_id>/', views.reset_password, name='reset_password')
+    path('reset_password<str:reset_id>/', views.reset_password, name='reset_password'),
+    path('products/', views.product_list, name='product_list'),
+    path('products/<slug:slug>/', views.product_detail, name='product_detail'),
+    path('cart/', views.cart_detail, name='cart_detail'),
+    path('cart/add/<int:product_id>/', views.cart_add, name='cart_add'),
+    path('cart/remove/<int:product_id>/', views.cart_remove, name='cart_remove'),
 
 ]

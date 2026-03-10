@@ -136,3 +136,6 @@ EMAIL_HOST_USER = config('EMAIL_USER',default="")
 EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD', default="")
 DEFAULT_FROM_EMAIL = 'benardfranklinenyamandi@gmail.com'
 
+import os
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
