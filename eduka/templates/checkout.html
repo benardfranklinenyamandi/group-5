@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Checkout / Pay with M-Pesa</h2>
+
+<form method="POST" action="">
+  {% csrf_token %}
+  
+  <label>Phone Number (format: 2547XXXXXXXX)</label><br>
+  <input type="text" name="phone_number" placeholder="2547XXXXXXXX" required><br><br>
+  
+  <label>Amount (Ksh)</label><br>
+  <input type="number" name="amount" placeholder="Enter amount" required><br><br>
+  
+  <button type="submit">Pay Now</button>
+</form>
+{% endblock %}

@@ -169,3 +169,18 @@ def reset_password(request , reset_id):
 
 def cart(request):
     return render(request, "cart.html")
+# paymentss
+from django.shortcuts import render
+
+def lipa_na_mpesa(request):
+    if request.method == 'POST':
+        phone = request.POST['phone_number']
+        amount = request.POST['amount']
+        print(f"Phone: {phone}, Amount: {amount}")  # For now, just print
+        return render(request, 'checkout.html', {"message": "Payment request received!"})
+    
+    return render(request, 'checkout.html')
+from django.shortcuts import render
+
+def checkout(request):
+    return render(request, 'checkout.html')
