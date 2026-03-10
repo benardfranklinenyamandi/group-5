@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -7,7 +7,8 @@ from django.conf import settings
 from django.core.mail import EmailMessage
 from django.utils import timezone
 from django.urls import reverse
-from .models import *
+from .models import OrderList, PasswordReset, Checkout
+
 
 # Create your views here.
 @login_required
@@ -173,3 +174,56 @@ def cart(request):
 
 def account(request):
     return render(request, "account.html")
+
+def order_list(request):
+    orders = OrderList.objects.all()
+    return render(request, 'order_list.html', {'orders': orders})
+
+
+# Edit order
+def order_edit(request, id):
+    order = get_object_or_404(OrderList, id=id)
+
+    if request.method == "POST":
+        order.customer_name = request.POST.get('customer_name')
+        order.status = request.POST.get('status')
+        order.total_amount = request.POST.get('total_amount')
+        order.save()
+        return redirect('order_list')
+
+    return render(request, 'edit_order.html', {'order': order})
+
+
+# Delete order
+def order_delete(request, id):
+    order = get_object_or_404(OrderList, id=id)
+
+    if request.method == "POST":
+        order.delete()
+        return redirect('order_list')
+
+    return redirect('order_list')
+
+def checkout(request):
+
+    if request.method == "POST":
+
+        Checkout.objects.create(
+            full_name=request.POST.get('full_name'),
+            email=request.POST.get('email'),
+            phone=request.POST.get('phone'),
+            address=request.POST.get('address'),
+            city=request.POST.get('city'),
+            product_name=request.POST.get('product_name'),
+            quantity=request.POST.get('quantity'),
+            total_price=request.POST.get('total_price'),
+            payment_method=request.POST.get('payment_method')
+        )
+
+        return redirect('checkout_success')
+
+    return render(request, 'checkout.html')
+
+
+def checkout_success(request):
+    return render(request, 'checkout_success.html')
