@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href=" https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+
+<h2>Edit Order</h2>
+
+<form method="POST">
+{% csrf_token %}
+
+<div class="mb-3">
+<label>Customer Name</label>
+<input type="text" name="customer_name" class="form-control" value="{{ order.customer_name }}">
+</div>
+
+<div class="mb-3">
+<label>Status</label>
+<select name="status" class="form-control">
+<option>Pending</option>
+<option>Processing</option>
+<option>Completed</option>
+<option>Cancelled</option>
+</select>
+</div>
+
+<div class="mb-3">
+<label>Total Amount</label>
+<input type="number" name="total_amount" class="form-control" value="{{ order.total_amount }}">
+</div>
+
+<button class="btn btn-success">Update Order</button>
+
+</form>
+
+</div>
+</body>
+</html>
