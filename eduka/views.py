@@ -1,4 +1,6 @@
+
 from django.shortcuts import render, redirect
+print("VIEWS FILE LOADED")
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -8,6 +10,7 @@ from django.core.mail import EmailMessage
 from django.utils import timezone
 from django.urls import reverse
 from .models import *
+
 
 # Create your views here.
 @login_required
@@ -169,3 +172,32 @@ def reset_password(request , reset_id):
 
 def cart(request):
     return render(request, "cart.html")
+
+# # paymentss
+# from django.shortcuts import render
+
+
+def lipa_na_mpesa(request):
+    print("VIEW IS RUNNING")
+    return render(request, "checkout.html")
+from django.shortcuts import render
+
+def checkout(request):
+    return render(request, 'checkout.html')
+import requests
+from requests.auth import HTTPBasicAuth
+from django.conf import settings
+def get_mpesa_token():
+
+    consumer_key = settings.MPESA_CONSUMER_KEY
+    consumer_secret = settings.MPESA_CONSUMER_SECRET
+
+    api_URL = "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
+
+    response = requests.get(api_URL, auth=HTTPBasicAuth(consumer_key, consumer_secret))
+
+    json_response = response.json()
+
+    access_token = json_response['access_token']
+
+    return access_token

@@ -29,6 +29,7 @@ urlpatterns = [
     path('forgot_password/', views.forgot_password, name='forgot_password'),
     path('logout/',views.logoutview, name='logout'),
     path('password_reset_sent/<str:reset_id>/', views.password_reset_sent, name='password_reset_sent'),
-    path('reset_password<str:reset_id>/', views.reset_password, name='reset_password')
+    path('reset_password/<str:reset_id>/', views.reset_password, name='reset_password'),
+    path('checkout/', views.lipa_na_mpesa, name='checkout')
 
 ]
