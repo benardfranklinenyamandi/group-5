@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -7,9 +7,7 @@ from django.conf import settings
 from django.core.mail import EmailMessage
 from django.utils import timezone
 from django.urls import reverse
-
-from .cart import Cart
-from .models import OrderList, PasswordReset, Checkout, Product, Category
+from .models import *
 
 # Create your views here.
 
@@ -182,114 +180,3 @@ def reset_password(request , reset_id):
 
 def cart(request):
     return render(request, "cart.html")
-
-
-def account(request):
-    return render(request, "account.html")
-
-def order_list(request):
-    orders = OrderList.objects.all()
-    return render(request, 'order_list.html', {'orders': orders})
-
-
-# Edit order
-def order_edit(request, id):
-    order = get_object_or_404(OrderList, id=id)
-
-    if request.method == "POST":
-        order.customer_name = request.POST.get('customer_name')
-        order.status = request.POST.get('status')
-        order.total_amount = request.POST.get('total_amount')
-        order.save()
-        return redirect('order_list')
-
-    return render(request, 'edit_order.html', {'order': order})
-
-
-# Delete order
-def order_delete(request, id):
-    order = get_object_or_404(OrderList, id=id)
-
-    if request.method == "POST":
-        order.delete()
-        return redirect('order_list')
-
-    return redirect('order_list')
-
-def checkout(request):
-
-    if request.method == "POST":
-
-        Checkout.objects.create(
-            full_name=request.POST.get('full_name'),
-            email=request.POST.get('email'),
-            phone=request.POST.get('phone'),
-            address=request.POST.get('address'),
-            city=request.POST.get('city'),
-            product_name=request.POST.get('product_name'),
-            quantity=request.POST.get('quantity'),
-            total_price=request.POST.get('total_price'),
-            payment_method=request.POST.get('payment_method')
-        )
-
-        return redirect('checkout_success')
-
-    return render(request, 'checkout.html')
-
-
-def checkout_success(request):
-    return render(request, 'checkout_success.html')
-
-def product_list(request):
-    categories = Category.objects.all()
-    category_slug = request.GET.get('category')
-    selected_category = None
-
-    products = Product.objects.filter(available=True)
-
-    if category_slug:
-        selected_category = get_object_or_404(Category, slug=category_slug)
-        products = products.filter(category=selected_category)
-
-    context = {
-        'products': products,
-        'categories': categories,
-        'selected_category': selected_category,
-    }
-    return render(request, 'product_list.html', context)
-
-
-def product_detail(request, slug):
-    product = get_object_or_404(Product, slug=slug, available=True)
-    images = product.images.all()
-
-    context = {
-        'product': product,
-        'images': images,
-    }
-    return render(request, 'product_detail.html', context)
-
-# Cart views
-
-def cart_detail(request):
-    cart = Cart(request)
-    context = {'cart': cart}
-    return render(request, 'cart.html', context)
-
-
-def cart_add(request, product_id):
-    cart = Cart(request)
-    product = get_object_or_404(Product, id=product_id)
-
-    quantity = int(request.POST.get('quantity', 1))
-    override = request.POST.get('override_quantity', False) == 'True'
-
-    cart.add(product=product, quantity=quantity, override_quantity=override)
-    return redirect('cart_detail')
-
-
-def cart_remove(request, product_id):
-    cart = Cart(request)
-    product = get_object_or_404(Product, id=product_id)
-    cart.remove(product)
-    return redirect('cart_detail')

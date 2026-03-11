@@ -28,6 +28,10 @@ urlpatterns = [
     path('forgot_password/', views.forgot_password, name='forgot_password'),
     path('logout/',views.logoutview, name='logout'),
     path('password_reset_sent/<str:reset_id>/', views.password_reset_sent, name='password_reset_sent'),
+<<<<<<< HEAD
+    path('reset_password/<str:reset_id>/', views.reset_password, name='reset_password'),
+    path('checkout/', views.lipa_na_mpesa, name='checkout')
+=======
     path('reset_password<str:reset_id>/', views.reset_password, name='reset_password'),
     path('account/', views.account, name='account'),
     path('', views.order_list, name='order_list'),
@@ -40,5 +44,6 @@ urlpatterns = [
     path('cart/', views.cart_detail, name='cart_detail'),
     path('cart/add/<int:product_id>/', views.cart_add, name='cart_add'),
     path('cart/remove/<int:product_id>/', views.cart_remove, name='cart_remove'),
+>>>>>>> d8322ce5462f6becc692692162ff9fa96f18ce5f
 
 ]
