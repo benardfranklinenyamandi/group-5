@@ -1,0 +1,263 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications | Eduka</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.png' %}"/>
+    <link rel="stylesheet" href="	https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            background: #faf6f1;
+            font-family: 'Cormorant Garamond', serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #e8ddd2;
+            width: 100%;
+            max-width: 480px;
+            padding: 48px 44px;
+            box-shadow: 0 8px 40px rgba(42,31,20,0.07);
+        }
+
+        .card-icon {
+            width: 52px; height: 52px;
+            background: linear-gradient(135deg, #c8a96e, #8b5e3c);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px;
+            margin-bottom: 24px;
+        }
+
+        .card-title {
+            font-size: 30px;
+            font-weight: 600;
+            color: #2a1f14;
+            margin-bottom: 6px;
+        }
+
+        .card-subtitle {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 3px;
+            color: #9a8c7e;
+            text-transform: uppercase;
+            margin-bottom: 36px;
+        }
+
+        /* ── Divider ── */
+        .divider {
+            display: flex; align-items: center;
+            gap: 12px; margin-bottom: 24px;
+        }
+        .divider-line { flex: 1; height: 1px; background: linear-gradient(to right, #e8ddd2, transparent); }
+        .divider-text {
+            font-family: 'DM Mono', monospace;
+            font-size: 9px; letter-spacing: 3px;
+            text-transform: uppercase; color: #c8a96e;
+            white-space: nowrap;
+        }
+
+        /* ── Toggle rows ── */
+        .toggle-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid #f0e8df;
+        }
+
+        .toggle-row:last-of-type { border-bottom: none; }
+
+        .toggle-info { flex: 1; padding-right: 20px; }
+
+        .toggle-label {
+            font-size: 17px;
+            color: #2a1f14;
+            margin-bottom: 3px;
+        }
+
+        .toggle-desc {
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 1px;
+            color: #9a8c7e;
+        }
+
+        /* ── Toggle switch ── */
+        .toggle { position: relative; display: inline-block; width: 44px; height: 24px; flex-shrink: 0; }
+        .toggle input { opacity: 0; width: 0; height: 0; }
+
+        .toggle-slider {
+            position: absolute; cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #d5c8bc; border-radius: 12px;
+            transition: background 0.25s;
+        }
+
+        .toggle-slider:before {
+            position: absolute; content: "";
+            height: 18px; width: 18px;
+            left: 3px; bottom: 3px;
+            background: #fff; border-radius: 50%;
+            transition: left 0.25s;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+        }
+
+        .toggle input:checked + .toggle-slider { background: #c8a96e; }
+        .toggle input:checked + .toggle-slider:before { left: 23px; }
+
+        /* ── Submit Button ── */
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: #2a1f14;
+            border: none;
+            color: #c8a96e;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-top: 32px;
+            transition: background 0.2s;
+        }
+
+        .btn-submit:hover { background: #3d2e1e; }
+
+        /* ── Footer ── */
+        .card-footer {
+            text-align: center;
+            margin-top: 24px;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: #9a8c7e;
+        }
+
+        .card-footer a { color: #c8a96e; text-decoration: none; }
+        .card-footer a:hover { text-decoration: underline; }
+
+        /* ── Messages ── */
+        .messages { margin-bottom: 24px; }
+        .message {
+            padding: 10px 14px; margin-bottom: 8px;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px; letter-spacing: 1px;
+        }
+        .message.success { background: rgba(200,169,110,0.15); color: #8b5e3c; border-left: 3px solid #c8a96e; }
+        .message.error   { background: rgba(192,80,58,0.1);   color: #c0503a; border-left: 3px solid #c0503a; }
+    </style>
+</head>
+<body id="page-notifications">
+
+<div class="card">
+
+    <div class="card-icon">🔔</div>
+    <div class="card-title">Notifications</div>
+    <div class="card-subtitle">Manage your notification preferences</div>
+
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="message {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="POST" action="{% url 'notifications' %}">
+        {% csrf_token %}
+
+        <!-- Email Notifications -->
+        <div class="divider">
+            <div class="divider-line"></div>
+            <span class="divider-text">Email</span>
+            <div class="divider-line" style="background: linear-gradient(to left, #e8ddd2, transparent);"></div>
+        </div>
+
+        <div class="toggle-row">
+            <div class="toggle-info">
+                <div class="toggle-label">Order Updates</div>
+                <div class="toggle-desc">Shipping and delivery notifications</div>
+            </div>
+            <label class="toggle">
+                <input type="checkbox" name="order_updates" {% if profile.order_updates %}checked{% endif %}>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
+        <div class="toggle-row">
+            <div class="toggle-info">
+                <div class="toggle-label">Promotions & Offers</div>
+                <div class="toggle-desc">Deals, discounts, and new arrivals</div>
+            </div>
+            <label class="toggle">
+                <input type="checkbox" name="promotions" {% if profile.promotions %}checked{% endif %}>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
+        <div class="toggle-row">
+            <div class="toggle-info">
+                <div class="toggle-label">Account Activity</div>
+                <div class="toggle-desc">Logins, password changes, and security alerts</div>
+            </div>
+            <label class="toggle">
+                <input type="checkbox" name="notifications" {% if profile.notifications %}checked{% endif %}>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
+        <!-- System Notifications -->
+        <div class="divider" style="margin-top: 24px;">
+            <div class="divider-line"></div>
+            <span class="divider-text">System</span>
+            <div class="divider-line" style="background: linear-gradient(to left, #e8ddd2, transparent);"></div>
+        </div>
+
+        <div class="toggle-row">
+            <div class="toggle-info">
+                <div class="toggle-label">Product Restocks</div>
+                <div class="toggle-desc">Get notified when wishlist items are back</div>
+            </div>
+            <label class="toggle">
+                <input type="checkbox" name="restocks" {% if profile.restocks %}checked{% endif %}>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
+        <div class="toggle-row">
+            <div class="toggle-info">
+                <div class="toggle-label">Newsletter</div>
+                <div class="toggle-desc">Weekly updates and curated content</div>
+            </div>
+            <label class="toggle">
+                <input type="checkbox" name="newsletter" {% if profile.newsletter %}checked{% endif %}>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
+        <button type="submit" class="btn-submit">Save Preferences →</button>
+    </form>
+
+    <div class="card-footer">
+        <a href="{% url 'account' %}">← Back to Account</a>
+    </div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

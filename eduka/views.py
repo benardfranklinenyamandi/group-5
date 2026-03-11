@@ -9,7 +9,7 @@ from django.utils import timezone
 from django.urls import reverse
 
 from .cart import Cart
-from .models import OrderList, PasswordReset, Checkout, Product, Category
+from .models import OrderList, PasswordReset, Checkout, Product, Category,Profile
 
 # Create your views here.
 
@@ -185,7 +185,21 @@ def cart(request):
 
 
 def account(request):
-    return render(request, "account.html")
+    profile, created = Profile.objects.get_or_create(user=request.user)
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+
+        if action == 'delete_account':
+            user = request.user
+            logout(request)
+            user.delete()
+            messages.success(request, "Your account has been deleted.")
+            return redirect('register')
+
+        return redirect('account')
+
+    return render(request, 'account.html', {'profile': profile})
 
 def order_list(request):
     orders = OrderList.objects.all()
@@ -293,3 +307,37 @@ def cart_remove(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     cart.remove(product)
     return redirect('cart_detail')
+
+@login_required(login_url='/login/')
+def notifications(request):
+    profile, created = Profile.objects.get_or_create(user=request.user)
+
+    if request.method == 'POST':
+        profile.notifications = 'notifications' in request.POST
+        profile.save()
+        messages.success(request, 'Notification preferences saved.')
+        return redirect('notifications')
+    return render(request, 'notifications.html', {'profile': profile})
+
+@login_required(login_url='/login/')
+def security(request):
+    profile, created = Profile.objects.get_or_create(user=request.user)
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+
+        if action == 'toggle_2fa':
+            profile.two_factor = 'two_factor' in request.POST
+            profile.save()
+            status = "enabled" if profile.two_factor else "disabled"
+            messages.success(request, f"Two-factor authentication {status}.")
+
+        elif action == 'toggle_notifications':
+            profile.notifications = 'notifications' in request.POST
+            profile.save()
+            status = "enabled" if profile.notifications else "disabled"
+            messages.success(request, f"Email notifications {status}.")
+
+        return redirect('security')
+
+    return render(request, 'security.html', {'profile': profile})
