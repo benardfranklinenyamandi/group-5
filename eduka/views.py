@@ -29,6 +29,7 @@ def index(request):
 
 def base(request):
     return render(request, 'base.html')
+
 def loginview(request):
     if request.method == "POST":
         username = request.POST.get("username")
@@ -44,6 +45,7 @@ def loginview(request):
             messages.error(request, "Invalid Login credentials")
             return redirect("login")
     return render(request, "login.html")
+
 def registerview(request):
     if request.method == "POST":
         first_name = request.POST.get("first_name")
@@ -81,9 +83,11 @@ def registerview(request):
             return redirect('login')
 
     return render(request, "register.html")
+
 def logoutview(request):
     logout(request)
     return redirect('login')
+
 def forgot_password(request):
     if request.method=="POST":
         email = request.POST.get("email")
@@ -111,13 +115,8 @@ def forgot_password(request):
         except User.DoesNotExist:
             messages.error(request, f"No user with email {email} found")
             return redirect('forgot_password')
-
-
-
-
-
-
     return render(request, "forgot_password.html")
+
 def password_reset_sent(request , reset_id):
     if PasswordReset.objects.filter(reset_id = reset_id).exists():
         return render( request, 'password_reset_sent.html')
