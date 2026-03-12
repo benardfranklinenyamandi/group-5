@@ -202,7 +202,8 @@ def checkout_success(request):
 def lipa_na_mpesa(request):
     return render(request, "checkout.html")
 def product_detail(request, slug):
-    return render(request, 'product_detail.html')
+    product = Product.objects.get(slug=slug)
+    return render(request, 'product_detail.html' , {'product': product})
 
 def cart_detail(request):
     return render(request, 'cart.html')
