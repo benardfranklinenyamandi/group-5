@@ -217,24 +217,23 @@ def order_delete(request, id):
     return redirect('order_list')
 
 def checkout(request):
-
     if request.method == "POST":
+        full_name = request.POST.get("full_name")
+        email = request.POST.get("email")
+        phone = request.POST.get("phone")
+        address = request.POST.get("address")
+        city = request.POST.get("city")
+        product_name = request.POST.get("product_name")
+        quantity = request.POST.get("quantity")
+        total_price = request.POST.get("total_price")
+        payment_method = request.POST.get("payment_method")
 
-        Checkout.objects.create(
-            full_name=request.POST.get('full_name'),
-            email=request.POST.get('email'),
-            phone=request.POST.get('phone'),
-            address=request.POST.get('address'),
-            city=request.POST.get('city'),
-            product_name=request.POST.get('product_name'),
-            quantity=request.POST.get('quantity'),
-            total_price=request.POST.get('total_price'),
-            payment_method=request.POST.get('payment_method')
-        )
+        if not payment_method:
+            messages.error(request, "Please select a payment method!")
+            return render(request, "checkout.html")  # reload form with error
 
-        return redirect('checkout_success')
 
-    return render(request, 'checkout.html')
+    return render(request, "checkout.html")
 
 
 def checkout_success(request):
