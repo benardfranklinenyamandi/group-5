@@ -7,6 +7,7 @@ from django.conf import settings
 from django.core.mail import EmailMessage
 from django.utils import timezone
 from django.urls import reverse
+from .models import *
 
 from .cart import Cart
 from .models import OrderList, PasswordReset, Checkout, Product, Category,Profile

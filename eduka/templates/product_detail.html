@@ -54,7 +54,7 @@
         {% endif %}
       </p>
 
-      <form method="POST" action="{% url 'cart_add' product.id %}">
+      <form method="POST" action="">
   {% csrf_token %}
   <input type="hidden" name="override_quantity" value="False">
   <div class="d-flex align-items-center gap-3 mt-3">
