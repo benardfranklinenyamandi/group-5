@@ -22,7 +22,7 @@ urlpatterns = [
     path('edit/<int:id>/', views.order_edit, name='order_edit'),
     path('delete/<int:id>/', views.order_delete, name='order_delete'),
 
-    path('checkout/', views.checkout, name='checkout'),
+    path('checkout/', views.lipa_na_mpesa, name='checkout'),
     path('success/', views.checkout_success, name='checkout_success'),
     path('products/', views.product_list, name='product_list'),
     path('products/<slug:slug>/', views.product_detail, name='product_detail'),

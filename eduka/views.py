@@ -180,3 +180,38 @@ def reset_password(request , reset_id):
 
 def cart(request):
     return render(request, "cart.html")
+def account(request):
+    return render(request, 'account.html')
+
+def order_list(request):
+    return render(request, 'order_list.html')
+
+def order_edit(request, id):
+    pass
+
+def order_delete(request, id):
+    pass
+
+def product_list(request):
+    products = Product.objects.all()
+    return render(request, 'product_list.html', {'products': products})
+
+def checkout_success(request):
+    return render(request, "checkout.html")
+
+def lipa_na_mpesa(request):
+    return render(request, "checkout.html")
+def product_detail(request, slug):
+    return render(request, 'product_detail.html')
+
+def cart_detail(request):
+    return render(request, 'cart.html')
+
+def cart_add(request, product_id):
+
+    from django.shortcuts import redirect
+    return redirect('cart_detail')
+
+def cart_remove(request, product_id):
+    from django.shortcuts import redirect
+    return redirect('cart_detail')
