@@ -180,9 +180,6 @@ def reset_password(request , reset_id):
 
         return render(request, "reset_password.html")
 
-def cart(request):
-    return render(request, "cart.html")
-
 
 def account(request):
     return render(request, "account.html")
