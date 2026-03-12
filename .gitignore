@@ -11,3 +11,7 @@ db.sqlite3
 # OS files
 .DS_Store
 Thumbs.db
+venv/
+*.pyc
+__pycache__/
+db.sqlite3
