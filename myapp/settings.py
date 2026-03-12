@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/6.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
-
+import os
 from pathlib import Path
 from decouple import config
 
@@ -135,4 +135,8 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = config('EMAIL_USER',default="")
 EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD', default="")
 DEFAULT_FROM_EMAIL = 'benardfranklinenyamandi@gmail.com'
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 

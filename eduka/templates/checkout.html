@@ -28,26 +28,30 @@
 
 <div class="mb-3">
 <label class="form-label">Full Name</label>
-<input type="text" name="full_name" class="form-control" required>
+<input type="text" name="full_name"
+       placeholder="Full Name"     class="form-control" required>
 </div>
 
 <div class="row">
 
 <div class="col-md-6 mb-3">
 <label>Email</label>
-<input type="email" name="email" class="form-control" required>
+<input type="email" name="email"
+        placeholder="Email" class="form-control" required>
 </div>
 
 <div class="col-md-6 mb-3">
 <label>Phone</label>
-<input type="text" name="phone" class="form-control" required>
+<input type="text" name="phone"
+         placeholder="Phone number"  class="form-control" required>
 </div>
 
 </div>
 
 <div class="mb-3">
 <label>Address</label>
-<textarea name="address" class="form-control"></textarea>
+<textarea name="address"
+          placeholder="Address" class="form-control"></textarea>
 </div>
 
 <div class="mb-3">
@@ -91,9 +95,11 @@
 
 </div>
 
-<button type="submit" class="btn btn-success w-100">
+<button type="submit" class="btn btn-success w-100 mb-2">
 Place Order
 </button>
+
+    <a href="{% url 'cart_detail' %}" class="btn btn-primary w-100">Back to Cart</a>
 
 </form>
 
