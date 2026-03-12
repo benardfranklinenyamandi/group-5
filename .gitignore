@@ -1,13 +1,5 @@
-# Python
 __pycache__/
-*.py[cod]
-*.class
+*.pyc
+*.pyo
 venv/
-ENV/
-
-# Database
 db.sqlite3
-
-# OS files
-.DS_Store
-Thumbs.db

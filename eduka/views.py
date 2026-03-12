@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -7,7 +7,9 @@ from django.conf import settings
 from django.core.mail import EmailMessage
 from django.utils import timezone
 from django.urls import reverse
-from .models import *
+
+from .cart import Cart
+from .models import OrderList, PasswordReset, Checkout, Product, Category
 
 # Create your views here.
 
@@ -27,6 +29,7 @@ def index(request):
 
 def base(request):
     return render(request, 'base.html')
+
 def loginview(request):
     if request.method == "POST":
         username = request.POST.get("username")
@@ -42,6 +45,7 @@ def loginview(request):
             messages.error(request, "Invalid Login credentials")
             return redirect("login")
     return render(request, "login.html")
+
 def registerview(request):
     if request.method == "POST":
         first_name = request.POST.get("first_name")
@@ -79,9 +83,11 @@ def registerview(request):
             return redirect('login')
 
     return render(request, "register.html")
+
 def logoutview(request):
     logout(request)
     return redirect('login')
+
 def forgot_password(request):
     if request.method=="POST":
         email = request.POST.get("email")
@@ -109,13 +115,8 @@ def forgot_password(request):
         except User.DoesNotExist:
             messages.error(request, f"No user with email {email} found")
             return redirect('forgot_password')
-
-
-
-
-
-
     return render(request, "forgot_password.html")
+
 def password_reset_sent(request , reset_id):
     if PasswordReset.objects.filter(reset_id = reset_id).exists():
         return render( request, 'password_reset_sent.html')
@@ -178,8 +179,7 @@ def reset_password(request , reset_id):
 
         return render(request, "reset_password.html")
 
-def cart(request):
-    return render(request, "cart.html")
+
 def account(request):
     return render(request, 'account.html')
 
@@ -192,27 +192,66 @@ def order_edit(request, id):
 def order_delete(request, id):
     pass
 
-def product_list(request):
-    products = Product.objects.all()
-    return render(request, 'product_list.html', {'products': products})
+    if request.method == "POST":
+
+        Checkout.objects.create(
+            full_name=request.POST.get('full_name'),
+            email=request.POST.get('email'),
+            phone=request.POST.get('phone'),
+            address=request.POST.get('address'),
+            city=request.POST.get('city'),
+            product_name=request.POST.get('product_name'),
+            quantity=request.POST.get('quantity'),
+            total_price=request.POST.get('total_price'),
+            payment_method=request.POST.get('payment_method')
+        )
+
+        return redirect('checkout_success')
+
+    return render(request, 'checkout.html')
+
 
 def checkout_success(request):
-    return render(request, "checkout.html")
+    return render(request, 'checkout_success.html')
+
+def product_list(request):
+    categories = Category.objects.all()
+    category_slug = request.GET.get('category')
+    selected_category = None
 
 def lipa_na_mpesa(request):
     return render(request, "checkout.html")
 def product_detail(request, slug):
-    product = Product.objects.get(slug=slug)
-    return render(request, 'product_detail.html' , {'product': product})
+    product = get_object_or_404(Product, slug=slug, available=True)
+    images = product.images.all()
+
+    context = {
+        'product': product,
+        'images': images,
+    }
+    return render(request, 'product_detail.html', context)
+
+# Cart views
 
 def cart_detail(request):
-    return render(request, 'cart.html')
+    cart = Cart(request)
+    context = {'cart': cart}
+    return render(request, 'cart.html', context)
+
 
 def cart_add(request, product_id):
+    cart = Cart(request)
+    product = get_object_or_404(Product, id=product_id)
 
-    from django.shortcuts import redirect
+    quantity = int(request.POST.get('quantity', 1))
+    override = request.POST.get('override_quantity', False) == 'True'
+
+    cart.add(product=product, quantity=quantity, override_quantity=override)
     return redirect('cart_detail')
 
+
 def cart_remove(request, product_id):
-    from django.shortcuts import redirect
+    cart = Cart(request)
+    product = get_object_or_404(Product, id=product_id)
+    cart.remove(product)
     return redirect('cart_detail')
