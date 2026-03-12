@@ -181,38 +181,16 @@ def reset_password(request , reset_id):
 
 
 def account(request):
-    return render(request, "account.html")
+    return render(request, 'account.html')
 
 def order_list(request):
-    orders = OrderList.objects.all()
-    return render(request, 'order_list.html', {'orders': orders})
+    return render(request, 'order_list.html')
 
-
-# Edit order
 def order_edit(request, id):
-    order = get_object_or_404(OrderList, id=id)
+    pass
 
-    if request.method == "POST":
-        order.customer_name = request.POST.get('customer_name')
-        order.status = request.POST.get('status')
-        order.total_amount = request.POST.get('total_amount')
-        order.save()
-        return redirect('order_list')
-
-    return render(request, 'edit_order.html', {'order': order})
-
-
-# Delete order
 def order_delete(request, id):
-    order = get_object_or_404(OrderList, id=id)
-
-    if request.method == "POST":
-        order.delete()
-        return redirect('order_list')
-
-    return redirect('order_list')
-
-def checkout(request):
+    pass
 
     if request.method == "POST":
 
@@ -241,20 +219,8 @@ def product_list(request):
     category_slug = request.GET.get('category')
     selected_category = None
 
-    products = Product.objects.filter(available=True)
-
-    if category_slug:
-        selected_category = get_object_or_404(Category, slug=category_slug)
-        products = products.filter(category=selected_category)
-
-    context = {
-        'products': products,
-        'categories': categories,
-        'selected_category': selected_category,
-    }
-    return render(request, 'product_list.html', context)
-
-
+def lipa_na_mpesa(request):
+    return render(request, "checkout.html")
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug, available=True)
     images = product.images.all()
