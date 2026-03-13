@@ -7,6 +7,12 @@ from django.conf import settings
 from django.core.mail import EmailMessage
 from django.utils import timezone
 from django.urls import reverse
+import json
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from django_daraja.mpesa.core import MpesaClient
+from .models import Order, OrderItem
+
 
 from .cart import Cart
 from .models import OrderList, PasswordReset, Checkout, Product, Category
@@ -210,17 +216,171 @@ def order_delete(request, id):
 
     return render(request, 'checkout.html')
 
+def checkout_details(request):
+    if request.method == "POST":
+
+        Checkout.objects.create(
+            full_name=request.POST.get('full_name'),
+            email=request.POST.get('email'),
+            phone=request.POST.get('phone'),
+            address=request.POST.get('address'),
+            city=request.POST.get('city'),
+            product_name=request.POST.get('product_name'),
+            quantity=request.POST.get('quantity'),
+            total_price=request.POST.get('total_price'),
+            payment_method=request.POST.get('payment_method')
+        )
+
+        return redirect('checkout_success')
+
+    return render(request, 'checkout_details.html')
 
 def checkout_success(request):
     return render(request, 'checkout_success.html')
 
+# Lipa na M-pesa views
+def lipa_na_mpesa(request):
+    cart = Cart(request)
+    if len(cart) == 0:
+        return redirect('product_list')
+    context = {
+        'cart': cart,
+        'total': cart.get_total(),
+    }
+    return render(request, 'checkout.html', context)
+
+@login_required
+def initiate_payment(request):
+    if request.method == 'POST':
+        phone = request.POST.get('phone')
+        cart  = Cart(request)
+        total = cart.get_total()
+
+        # Validate phone
+        if not phone or len(phone) < 10:
+            messages.error(request, 'Please enter a valid phone number e.g. 0712345678')
+            return redirect('checkout')
+
+        # Create order
+        order = Order.objects.create(
+            user         = request.user if request.user.is_authenticated else None,
+            total_amount = total,
+            phone_number = phone,
+            status       = 'pending',
+        )
+
+        # Save order items
+        for item in cart:
+            OrderItem.objects.create(
+                order    = order,
+                product  = item['product'],
+                quantity = item['quantity'],
+                price    = item['price'],
+            )
+
+        # Send STK push
+        try:
+            cl = MpesaClient()
+            response = cl.stk_push(
+                phone,
+                int(total),
+                f'Order-{order.id}',
+                f'EduKa Stationery Order {order.id}',
+                settings.MPESA_CALLBACK_URL
+            )
+
+            if response.checkout_request_id:
+                order.checkout_request_id = response.checkout_request_id
+                order.save()
+                messages.success(request, f'Mpesa prompt sent to {phone}. Enter your PIN to complete payment.')
+                return redirect('order_pending', order_id=order.id)
+            else:
+                order.status = 'failed'
+                order.save()
+                messages.error(request, f'Failed to send prompt: {response.error_message}')
+                return redirect('checkout')
+
+        except Exception as e:
+            order.status = 'failed'
+            order.save()
+            messages.error(request, f'Error: {str(e)}')
+            return redirect('checkout')
+
+    return redirect('checkout')
+
+def order_pending(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+
+    # Refresh page every 5 seconds to check payment status
+    if order.status == 'paid':
+        return redirect('payment_success', order_id=order.id)
+
+    if order.status == 'failed':
+        messages.error(request, 'Payment failed. Please try again.')
+        return redirect('checkout')
+
+    context = {'order': order}
+    return render(request, 'order_pending.html', context)
+@csrf_exempt
+def mpesa_callback(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        try:
+            result              = data['Body']['stkCallback']
+            checkout_request_id = result['CheckoutRequestID']
+            result_code         = result['ResultCode']
+
+            order = Order.objects.get(checkout_request_id=checkout_request_id)
+
+            if result_code == 0:
+                items            = result['CallbackMetadata']['Item']
+                mpesa_code       = next(i['Value'] for i in items if i['Name'] == 'MpesaReceiptNumber')
+                order.status     = 'paid'
+                order.mpesa_code = mpesa_code
+                order.save()
+                # Clear the cart
+                if 'cart' in request.session:
+                    del request.session['cart']
+            else:
+                order.status = 'failed'
+                order.save()
+
+        except Exception as e:
+            print(f"Callback error: {e}")
+
+    return JsonResponse({'ResultCode': 0, 'ResultDesc': 'Success'})
+
+
+def check_payment_status(request, order_id):
+    order = Order.objects.get(id=order_id)
+    return JsonResponse({'status': order.status})
+
+
+def payment_success(request, order_id):
+    order = Order.objects.get(id=order_id)
+    return render(request, 'payment_success.html', {'order': order})
+
+# Products views
+@login_required
 def product_list(request):
     categories = Category.objects.all()
     category_slug = request.GET.get('category')
     selected_category = None
 
-def lipa_na_mpesa(request):
-    return render(request, "checkout.html")
+    products = Product.objects.filter(available=True)
+
+    if category_slug:
+        selected_category = get_object_or_404(Category, slug=category_slug)
+        products = products.filter(category=selected_category)
+
+    context = {
+        'products': products,
+        'categories': categories,
+        'selected_category': selected_category,
+    }
+    return render(request, 'product_list.html', context)
+
+@login_required
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug, available=True)
     images = product.images.all()
@@ -232,13 +392,13 @@ def product_detail(request, slug):
     return render(request, 'product_detail.html', context)
 
 # Cart views
-
+@login_required
 def cart_detail(request):
     cart = Cart(request)
     context = {'cart': cart}
     return render(request, 'cart.html', context)
 
-
+@login_required
 def cart_add(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(Product, id=product_id)
@@ -249,7 +409,7 @@ def cart_add(request, product_id):
     cart.add(product=product, quantity=quantity, override_quantity=override)
     return redirect('cart_detail')
 
-
+@login_required
 def cart_remove(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(Product, id=product_id)
