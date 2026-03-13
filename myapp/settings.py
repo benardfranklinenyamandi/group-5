@@ -1,7 +1,10 @@
 
 import os
+from email.policy import default
 from pathlib import Path
 from decouple import config
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -29,7 +32,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'eduka'
+    'eduka',
+    'django_daraja',
+
+
 ]
 
 MIDDLEWARE = [
@@ -131,7 +137,13 @@ DEFAULT_FROM_EMAIL = 'benardfranklinenyamandi@gmail.com'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-from django.conf import settings
-from django.conf.urls.static import static
-
-
+# Mpesa Daraja Settings
+MPESA_ENVIRONMENT          = 'sandbox'
+MPESA_CONSUMER_KEY         = 'Q8NGPbnOw3oK29PLWvsInX9kmCK9uz2yevcgDuVAonCAqR3z'
+MPESA_CONSUMER_SECRET      = 'MDjN0sxwE3hVAEsuDC6dbZddNzGzEZQPLwu3XotCSGgtmCWTckJzbevC8Umx4nv0'
+MPESA_EXPRESS_SHORTCODE    = '174379'
+MPESA_SHORTCODE_TYPE       = 'paybill'
+MPESA_PASSKEY              = 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919'
+MPESA_CALLBACK_URL         = 'https://webhook.site/751722d2-b365-4cf7-be92-dae8e6bb9a19'
+MPESA_INITIATOR_USERNAME   = 'testapi'
+MPESA_INITIATOR_SECURITY_CREDENTIAL = 'Safaricom999!*!'

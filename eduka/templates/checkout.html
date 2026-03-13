@@ -1,134 +1,91 @@
-<<<<<<< HEAD
 {% extends 'base.html' %}
+{% block title %}Checkout{% endblock %}
 
 {% block content %}
-<h2>Checkout / Pay with M-Pesa</h2>
-
-<form method="POST" action="">
-  {% csrf_token %}
-  
-  <label>Phone Number (format: 2547XXXXXXXX)</label><br>
-  <input type="text" name="phone_number" placeholder="2547XXXXXXXX" required><br><br>
-  
-  <label>Amount (Ksh)</label><br>
-  <input type="number" name="amount" placeholder="Enter amount" required><br><br>
-  
-  <button type="submit">Pay Now</button>
-</form>
-{% endblock %}
-=======
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Checkout</title>
-    <link rel="stylesheet" href=" https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
-
-</head>
-<body class="bg-light">
-<div class="container mt-5">
-
 <div class="row justify-content-center">
+  <div class="col-md-6">
 
-<div class="col-md-8">
+    <h2 class="mb-4">Checkout</h2>
 
-<div class="card shadow">
+    <!-- Messages -->
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} mb-3">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
 
-<div class="card-header bg-primary text-white">
-<h4>Checkout</h4>
+    <!-- Order Summary -->
+    <div class="shadow">
+    <div class="card mb-4 border-0 shadow-sm">
+      <div class="card-header bg-primary text-white fw-bold">
+        Order Summary
+      </div>
+      <div class="card-body">
+        {% for item in cart %}
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <div>
+            <span class="fw-bold">{{ item.product.name }}</span>
+            <small class="text-muted ms-2">x {{ item.quantity }}</small>
+          </div>
+          <span>KSh {{ item.total_price }}</span>
+        </div>
+        {% endfor %}
+        <hr>
+        <div class="d-flex justify-content-between fw-bold fs-5">
+          <span>Total</span>
+          <span class="text-success">KSh {{ total }}</span>
+        </div>
+      </div>
+    </div>
+      </div>
+
+    <!-- Mpesa Payment Form -->
+    <div class="shadow mb-4">
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-success text-white fw-bold">
+        Pay with Mpesa
+      </div>
+      <div class="card-body">
+        <p class="text-muted small mb-3">
+          Enter your Safaricom number below. You will receive
+          a prompt on your phone to confirm payment.
+        </p>
+
+        <form method="POST" action="{% url 'initiate_payment' %}">
+          {% csrf_token %}
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">Safaricom Phone Number</label>
+            <div class="input-group">
+              <span class="input-group-text bg-success text-white">+254</span>
+              <input type="tel"
+                     name="phone"
+                     class="form-control form-control-lg"
+                     placeholder="07XXXXXXXX"
+                     required>
+            </div>
+            <small class="text-muted">
+              Enter full number e.g. 0712345678
+            </small>
+          </div>
+
+          <button type="submit" class="btn btn-success btn-lg w-100 fw-bold">
+            Pay KSh {{ total }} via Mpesa
+          </button>
+
+        </form>
+
+        <div class="text-center mt-3">
+          <a href="{% url 'cart_detail' %}" class="text-muted small">
+            Back to Cart
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+    </div>
 </div>
-
-<div class="card-body">
-
-<form method="POST">
-{% csrf_token %}
-
-<h5 class="mb-3">Customer Details</h5>
-
-<div class="mb-3">
-<label class="form-label">Full Name</label>
-<input type="text" name="full_name" class="form-control" required>
-</div>
-
-<div class="row">
-
-<div class="col-md-6 mb-3">
-<label>Email</label>
-<input type="email" name="email" class="form-control" required>
-</div>
-
-<div class="col-md-6 mb-3">
-<label>Phone</label>
-<input type="text" name="phone" class="form-control" required>
-</div>
-
-</div>
-
-<div class="mb-3">
-<label>Address</label>
-<textarea name="address" class="form-control"></textarea>
-</div>
-
-<div class="mb-3">
-<label>City</label>
-<input type="text" name="city" class="form-control">
-</div>
-
-<hr>
-
-<h5 class="mb-3">Order Details</h5>
-
-<div class="mb-3">
-<label>Product Name</label>
-<input type="text" name="product_name" class="form-control">
-</div>
-
-<div class="row">
-
-<div class="col-md-6 mb-3">
-<label>Quantity</label>
-<input type="number" name="quantity" class="form-control">
-</div>
-
-<div class="col-md-6 mb-3">
-<label>Total Price</label>
-<input type="number" name="total_price" class="form-control">
-</div>
-
-</div>
-
-<div class="mb-3">
-<label>Payment Method</label>
-
-<select name="payment_method" class="form-control">
-
-<option value="M-Pesa">M-Pesa</option>
-<option value="Card">Card</option>
-<option value="Cash on Delivery">Cash on Delivery</option>
-
-</select>
-
-</div>
-
-<button type="submit" class="btn btn-success w-100 mb-2">
-Place Order
-</button>
-
-    <a href="{% url 'cart_detail' %}" class="btn btn-primary w-100">Back to Cart</a>
-
-</form>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-
-</body>
-</html>
->>>>>>> d8322ce5462f6becc692692162ff9fa96f18ce5f
+{% endblock %}

@@ -23,12 +23,22 @@ urlpatterns = [
     path('delete/<int:id>/', views.order_delete, name='order_delete'),
 
     path('checkout/', views.lipa_na_mpesa, name='checkout'),
+    path('checkout_details/', views.checkout_details, name='checkout_details'),
     path('success/', views.checkout_success, name='checkout_success'),
+
     path('products/', views.product_list, name='product_list'),
     path('products/<slug:slug>/', views.product_detail, name='product_detail'),
     path('cart/', views.cart_detail, name='cart_detail'),
     path('cart/add/<int:product_id>/', views.cart_add, name='cart_add'),
-    path('cart/remove/<int:product_id>/', views.cart_remove, name='cart_remove')
+    path('cart/remove/<int:product_id>/', views.cart_remove, name='cart_remove'),
+
+    # mpesa
+    path('initiate-payment/', views.initiate_payment, name='initiate_payment'),
+    path('mpesa/callback/', views.mpesa_callback, name='mpesa_callback'),
+    path('payment-success/<int:order_id>/', views.payment_success, name='payment_success'),
+    path('payment-status/<int:order_id>/', views.check_payment_status, name='check_payment_status'),
+    path('initiate-payment/', views.initiate_payment, name='initiate_payment'),
+    path('order-pending/<int:order_id>/', views.order_pending, name='order_pending'),
 
 ]
 
