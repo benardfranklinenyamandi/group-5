@@ -11,8 +11,7 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django_daraja.mpesa.core import MpesaClient
-from .models import Order, OrderItem
-
+from .models import Order, OrderItem, Profile
 
 from .cart import Cart
 from .models import OrderList, PasswordReset, Checkout, Product, Category
@@ -186,8 +185,6 @@ def reset_password(request , reset_id):
         return render(request, "reset_password.html")
 
 
-def account(request):
-    return render(request, 'account.html')
 
 def order_list(request):
     return render(request, 'order_list.html')
@@ -415,3 +412,54 @@ def cart_remove(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     cart.remove(product)
     return redirect('cart_detail')
+
+
+@login_required(login_url='/login/')
+def account(request):
+    profile, created = Profile.objects.get_or_create(user=request.user)
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        # handle actions here, e.g.:
+        if action == 'update':
+            # process form data
+            pass
+        return redirect('account')
+
+    return render(request, 'account.html', {'profile': profile})
+
+
+@login_required(login_url='/login/')
+def security(request):
+    if request.method == 'POST':
+        current_password = request.POST.get('current_password')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if not request.user.check_password(current_password):
+            messages.error(request, 'Current password is incorrect.')
+        elif new_password != confirm_password:
+            messages.error(request, 'New passwords do not match.')
+        elif len(new_password) < 8:
+            messages.error(request, 'Password must be at least 8 characters.')
+        else:
+            request.user.set_password(new_password)
+            request.user.save()
+            messages.success(request, 'Password updated successfully.')
+            return redirect('login')  # re-login after password change
+
+    return render(request, 'security.html')
+
+
+@login_required(login_url='/login/')
+def notifications(request):
+    profile, created = Profile.objects.get_or_create(user=request.user)
+
+    if request.method == 'POST':
+        profile.notifications = 'notifications' in request.POST
+        profile.save()
+        messages.success(request, 'Notification preferences saved.')
+        return redirect('notifications')
+
+    return render(request, 'notifications.html', {'profile': profile})
+
