@@ -1,0 +1,123 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications | Eduka</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&family=Montserrat:wght@600;700&family=Open+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            background-color: var(--background-color);
+            font-family: var(--default-font);
+            color: var(--default-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="notifications-card">
+
+    <div class="card-icon">🔔</div>
+    <div class="card-title">Notifications</div>
+    <div class="card-subtitle">Manage your notification preferences</div>
+
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="message {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="POST" action="{% url 'notifications' %}">
+        {% csrf_token %}
+
+        <!-- Email Notifications -->
+        <div class="divider">
+            <div class="divider-line"></div>
+            <span class="divider-text">Email</span>
+            <div class="divider-line"></div>
+        </div>
+
+        <div class="toggle-row">
+            <div class="toggle-info">
+                <div class="toggle-label">Order Updates</div>
+                <div class="toggle-desc">Shipping and delivery notifications</div>
+            </div>
+            <label class="toggle">
+                <input type="checkbox" name="order_updates" {% if profile.order_updates %}checked{% endif %}>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
+        <div class="toggle-row">
+            <div class="toggle-info">
+                <div class="toggle-label">Promotions & Offers</div>
+                <div class="toggle-desc">Deals, discounts, and new arrivals</div>
+            </div>
+            <label class="toggle">
+                <input type="checkbox" name="promotions" {% if profile.promotions %}checked{% endif %}>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
+        <div class="toggle-row">
+            <div class="toggle-info">
+                <div class="toggle-label">Account Activity</div>
+                <div class="toggle-desc">Logins, password changes, and security alerts</div>
+            </div>
+            <label class="toggle">
+                <input type="checkbox" name="notifications" {% if profile.notifications %}checked{% endif %}>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
+        <!-- System Notifications -->
+        <div class="divider" style="margin-top: 24px;">
+            <div class="divider-line"></div>
+            <span class="divider-text">System</span>
+            <div class="divider-line"></div>
+        </div>
+
+        <div class="toggle-row">
+            <div class="toggle-info">
+                <div class="toggle-label">Product Restocks</div>
+                <div class="toggle-desc">Get notified when wishlist items are back</div>
+            </div>
+            <label class="toggle">
+                <input type="checkbox" name="restocks" {% if profile.restocks %}checked{% endif %}>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
+        <div class="toggle-row last">
+            <div class="toggle-info">
+                <div class="toggle-label">Newsletter</div>
+                <div class="toggle-desc">Weekly updates and curated content</div>
+            </div>
+            <label class="toggle">
+                <input type="checkbox" name="newsletter" {% if profile.newsletter %}checked{% endif %}>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
+        <button type="submit" class="btn-submit">Save Preferences →</button>
+    </form>
+
+    <div class="card-footer">
+        <a href="{% url 'account' %}">← Back to Account</a>
+    </div>
+
+</div>
+
+</body>
+</html>

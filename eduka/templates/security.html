@@ -1,0 +1,309 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security | Eduka</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&family=Montserrat:wght@600;700&family=Open+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            background-color: var(--background-color);
+            font-family: var(--default-font);
+            color: var(--default-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        /* ── Card ── */
+        .security-card {
+            background: var(--surface-color);
+            border: 1px solid color-mix(in srgb, var(--default-color), transparent 88%);
+            width: 100%;
+            max-width: 480px;
+            padding: 48px 44px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.07);
+            border-radius: 4px;
+        }
+
+        /* ── Header ── */
+        .card-icon {
+            width: 52px;
+            height: 52px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 24px;
+            color: var(--contrast-color);
+        }
+
+        .card-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--heading-color);
+            font-family: var(--heading-font);
+            margin-bottom: 6px;
+            letter-spacing: 0.3px;
+        }
+
+        .card-subtitle {
+            font-family: var(--nav-font);
+            font-size: 13px;
+            color: color-mix(in srgb, var(--default-color), transparent 35%);
+            margin-bottom: 32px;
+        }
+
+        /* ── Divider ── */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: color-mix(in srgb, var(--default-color), transparent 88%);
+        }
+
+        .divider-text {
+            font-family: var(--nav-font);
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent-color);
+            white-space: nowrap;
+            font-weight: 600;
+        }
+
+        /* ── Toggle rows ── */
+        .toggle-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid color-mix(in srgb, var(--default-color), transparent 92%);
+        }
+
+        .toggle-info { flex: 1; padding-right: 20px; }
+
+        .toggle-label {
+            font-size: 16px;
+            font-family: var(--default-font);
+            color: var(--heading-color);
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+
+        .toggle-desc {
+            font-family: var(--nav-font);
+            font-size: 12px;
+            color: color-mix(in srgb, var(--default-color), transparent 40%);
+        }
+
+        /* ── Toggle switch ── */
+        .toggle {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        .toggle input { opacity: 0; width: 0; height: 0; }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: color-mix(in srgb, var(--default-color), transparent 75%);
+            border-radius: 12px;
+            transition: background 0.25s;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background: var(--contrast-color);
+            border-radius: 50%;
+            transition: left 0.25s;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+        }
+
+        .toggle input:checked + .toggle-slider { background: var(--accent-color); }
+        .toggle input:checked + .toggle-slider:before { left: 23px; }
+
+        /* ── Password info row ── */
+        .info-row {
+            padding: 16px 0;
+            border-bottom: 1px solid color-mix(in srgb, var(--default-color), transparent 92%);
+        }
+
+        /* ── Submit Button ── */
+        .btn-submit {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background-color: var(--accent-color);
+            border: none;
+            color: var(--contrast-color);
+            font-family: var(--nav-font);
+            font-size: 13px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 28px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .btn-submit:hover {
+            background-color: color-mix(in srgb, var(--accent-color), transparent 20%);
+            color: var(--contrast-color);
+        }
+
+        /* ── Footer links ── */
+        .card-footer {
+            text-align: center;
+            margin-top: 24px;
+            font-family: var(--nav-font);
+            font-size: 13px;
+            color: color-mix(in srgb, var(--default-color), transparent 40%);
+        }
+
+        .card-footer a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .card-footer a:hover {
+            color: color-mix(in srgb, var(--accent-color), transparent 25%);
+            text-decoration: underline;
+        }
+
+        /* ── Messages ── */
+        .messages { margin-bottom: 24px; }
+
+        .message {
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            font-family: var(--nav-font);
+            font-size: 13px;
+            border-radius: 4px;
+        }
+
+        .message.success {
+            background: color-mix(in srgb, var(--accent-color), transparent 90%);
+            color: var(--accent-color);
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .message.error {
+            background: rgba(223, 21, 41, 0.08);
+            color: #df1529;
+            border-left: 3px solid #df1529;
+        }
+    </style>
+</head>
+<body>
+
+<div class="security-card">
+
+    <div class="card-icon">🔒</div>
+    <div class="card-title">Security</div>
+    <div class="card-subtitle">Manage your account security settings</div>
+
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="message {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Two-Factor Authentication -->
+    <div class="divider">
+        <div class="divider-line"></div>
+        <span class="divider-text">Authentication</span>
+        <div class="divider-line"></div>
+    </div>
+
+    <form method="POST" action="{% url 'security' %}">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="toggle_2fa">
+        <div class="toggle-row">
+            <div class="toggle-info">
+                <div class="toggle-label">Two-Factor Authentication</div>
+                <div class="toggle-desc">Add an extra layer of protection</div>
+            </div>
+            <label class="toggle">
+                <input type="checkbox" name="two_factor"
+                    {% if profile.two_factor %}checked{% endif %}
+                    onchange="this.form.submit()">
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+    </form>
+
+    <!-- Email Notifications -->
+    <form method="POST" action="{% url 'security' %}">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="toggle_notifications">
+        <div class="toggle-row">
+            <div class="toggle-info">
+                <div class="toggle-label">Email Notifications</div>
+                <div class="toggle-desc">Receive account activity updates</div>
+            </div>
+            <label class="toggle">
+                <input type="checkbox" name="notifications"
+                    {% if profile.notifications %}checked{% endif %}
+                    onchange="this.form.submit()">
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+    </form>
+
+    <!-- Change Password -->
+    <div class="divider" style="margin-top: 28px;">
+        <div class="divider-line"></div>
+        <span class="divider-text">Password</span>
+        <div class="divider-line"></div>
+    </div>
+
+    <div class="info-row">
+        <div class="toggle-label">Change Password</div>
+        <div class="toggle-desc">You will be redirected to the password reset page</div>
+    </div>
+
+    <a href="{% url 'forgot_password' %}" class="btn-submit">
+        Change Password →
+    </a>
+
+    <div class="card-footer">
+        <a href="{% url 'account' %}">← Back to Account</a>
+        &nbsp;&nbsp;·&nbsp;&nbsp;
+        <a href="{% url 'forgot_password' %}">Forgot password?</a>
+    </div>
+
+</div>
+
+</body>
+</html>
