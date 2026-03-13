@@ -19,7 +19,7 @@
           Shop premium pens, notebooks, art supplies and office essentials
           at unbeatable prices — delivered right to your door.</p>
                 <div class="cta-group">
-                  <a href="{% url 'login' %}" class="btn-primary">Shop Now</a>
+                  <a href="{% url 'product_list' %}" class="btn-primary">Shop Now</a>
                   <a href="#categories" class="btn-secondary glightbox">
                     <i class="bi bi-play-circle"></i>
                     <span>Browse Categories</span>
@@ -53,7 +53,7 @@
               <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
                 <div class="feature-item">
                   <div class="icon">
-                    <i class="bi bi-graph-up fa-light fa-ranking-star" style="color: rgb(116, 192, 252);"></i>
+                    <i class="bi bi-graph-up fa-solid fa-ranking-star fa-flip" style="color: rgb(116, 192, 252);"></i>
                   </div>
                   <h4>Premium Quality</h4>
                   <p>We stock only genuine, high-quality products from trusted
@@ -63,7 +63,7 @@
               <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
                 <div class="feature-item">
                   <div class="icon">
-                    <i class="bi bi-lightbulb fa-thin fa-cubes" style="color: rgb(177, 151, 252);"></i>
+                    <i class="bi bi-lightbulb fa-thin fa-cubes fa-solid" style="color: rgb(177, 151, 252);"></i>
                   </div>
                   <h4>Best Prices</h4>
                   <p>Get the best value for your money with our competitive
@@ -73,7 +73,7 @@
               <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
                 <div class="feature-item">
                   <div class="icon">
-                    <i class="fa-regular fa-alarm-clock" style="color: rgb(255, 212, 59);"></i>
+                    <i class="fa-solid fa-truck-fast fa-flip"></i>
                   </div>
                   <h4>Fast Delivery</h4>
                   <p>We deliver across Kenya quickly and reliably.
@@ -125,7 +125,7 @@
 
           <!-- Category Icon -->
           <div class="fs-1 mb-2">
-            {% if category.slug == 'pens-pencils' %}<i class="fa-light fa-pen-clip fa-shake" style="color: rgb(43, 8, 144);"></i>
+            {% if category.slug == 'pens-pencils' %}<i class="fa-solid fa-pen-clip fa-shake" style="color: rgb(43, 8, 144);"></i>
             {% elif category.slug == 'notebooks-paper' %} <i class="fa-solid fa-book" style="color: rgb(252, 116, 230);"></i>
             {% elif category.slug == 'art-supplies' %}<i class="fa-solid fa-palette" style="color: rgb(43, 8, 144);"></i>
             {% elif category.slug == 'office-supplies' %}<i class="fa-solid fa-business-time fa-bounce" style="color: rgb(177, 151, 252);"></i>
