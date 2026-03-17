@@ -452,16 +452,20 @@ def security(request):
 
     return render(request, 'security.html', {'profile': profile})
 
-
 @login_required(login_url='/login/')
 def notifications(request):
     profile, created = Profile.objects.get_or_create(user=request.user)
 
     if request.method == 'POST':
         profile.notifications = 'notifications' in request.POST
+        profile.order_updates = 'order_updates' in request.POST
+        profile.promotions = 'promotions' in request.POST
+        profile.restocks = 'restocks' in request.POST
+        profile.newsletter = 'newsletter' in request.POST
         profile.save()
         messages.success(request, 'Notification preferences saved.')
         return redirect('notifications')
 
     return render(request, 'notifications.html', {'profile': profile})
+
 
