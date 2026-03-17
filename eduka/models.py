@@ -132,8 +132,6 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone = models.CharField(max_length=20, blank=True)
     location = models.CharField(max_length=100, blank=True)
-    role = models.CharField(max_length=100, blank=True)
-    plan = models.CharField(max_length=50, default='Free')
     two_factor = models.BooleanField(default=False)
     notifications = models.BooleanField(default=True)
     renewal_date = models.DateField(null=True, blank=True)
