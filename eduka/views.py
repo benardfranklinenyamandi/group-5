@@ -431,24 +431,26 @@ def account(request):
 
 @login_required(login_url='/login/')
 def security(request):
+    profile, created = Profile.objects.get_or_create(user=request.user)
+
     if request.method == 'POST':
-        current_password = request.POST.get('current_password')
-        new_password = request.POST.get('new_password')
-        confirm_password = request.POST.get('confirm_password')
+        action = request.POST.get('action')
 
-        if not request.user.check_password(current_password):
-            messages.error(request, 'Current password is incorrect.')
-        elif new_password != confirm_password:
-            messages.error(request, 'New passwords do not match.')
-        elif len(new_password) < 8:
-            messages.error(request, 'Password must be at least 8 characters.')
-        else:
-            request.user.set_password(new_password)
-            request.user.save()
-            messages.success(request, 'Password updated successfully.')
-            return redirect('login')  # re-login after password change
+        if action == 'toggle_2fa':
+            profile.two_factor = 'two_factor' in request.POST
+            profile.save()
+            status = "enabled" if profile.two_factor else "disabled"
+            messages.success(request, f"Two-factor authentication {status}.")
 
-    return render(request, 'security.html')
+        elif action == 'toggle_notifications':
+            profile.notifications = 'notifications' in request.POST
+            profile.save()
+            status = "enabled" if profile.notifications else "disabled"
+            messages.success(request, f"Email notifications {status}.")
+
+        return redirect('security')
+
+    return render(request, 'security.html', {'profile': profile})
 
 
 @login_required(login_url='/login/')
