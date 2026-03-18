@@ -20,6 +20,7 @@ urlpatterns = [
     path('account/', views.account, name='account'),
     path('security/', views.security, name='security'),
     path('notifications/', views.notifications, name='notifications'),
+    path('history/', views.history, name='history'),
 
 
     path('orders/', views.order_list, name='order_list'),

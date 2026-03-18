@@ -469,3 +469,16 @@ def notifications(request):
     return render(request, 'notifications.html', {'profile': profile})
 
 
+@login_required(login_url='/login/')
+def history(request):
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+    total_spent = sum(o.total_amount for o in orders)
+    paid_count = orders.filter(status='paid').count()
+    pending_count = orders.filter(status='pending').count()
+
+    return render(request, 'history.html', {
+        'orders': orders,
+        'total_spent': total_spent,
+        'paid_count': paid_count,
+        'pending_count': pending_count,
+    })
