@@ -18,6 +18,11 @@ urlpatterns = [
 
 
     path('account/', views.account, name='account'),
+    path('security/', views.security, name='security'),
+    path('notifications/', views.notifications, name='notifications'),
+    path('history/', views.history, name='history'),
+
+
     path('orders/', views.order_list, name='order_list'),
     path('edit/<int:id>/', views.order_edit, name='order_edit'),
     path('delete/<int:id>/', views.order_delete, name='order_delete'),

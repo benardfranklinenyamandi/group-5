@@ -4878,3 +4878,388 @@ section,
 text-align:center;
 font-family:italic;
 }
+.security-card {
+  background: var(--surface-color);
+  border: 1px solid color-mix(in srgb, var(--default-color), transparent 88%);
+  width: 100%;
+  max-width: 480px;
+  padding: 48px 44px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.07);
+  border-radius: 4px;
+}
+
+.security-card .card-icon {
+  width: 52px;
+  height: 52px;
+  background-color: var(--accent-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-bottom: 24px;
+  color: var(--contrast-color);
+}
+
+.security-card .card-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--heading-color);
+  font-family: var(--heading-font);
+  margin-bottom: 6px;
+}
+
+.security-card .card-subtitle {
+  font-family: var(--nav-font);
+  font-size: 13px;
+  color: color-mix(in srgb, var(--default-color), transparent 35%);
+  margin-bottom: 32px;
+}
+
+.security-card .divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.security-card .divider-line {
+  flex: 1;
+  height: 1px;
+  background: color-mix(in srgb, var(--default-color), transparent 88%);
+}
+
+.security-card .divider-text {
+  font-family: var(--nav-font);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent-color);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.security-card .toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--default-color), transparent 92%);
+}
+
+.security-card .toggle-info {
+  flex: 1;
+  padding-right: 20px;
+}
+
+.security-card .toggle-label {
+  font-size: 16px;
+  font-family: var(--default-font);
+  color: var(--heading-color);
+  font-weight: 500;
+  margin-bottom: 3px;
+}
+
+.security-card .toggle-desc {
+  font-family: var(--nav-font);
+  font-size: 12px;
+  color: color-mix(in srgb, var(--default-color), transparent 40%);
+}
+
+.security-card .toggle {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.security-card .toggle input { opacity: 0; width: 0; height: 0; }
+
+.security-card .toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: color-mix(in srgb, var(--default-color), transparent 75%);
+  border-radius: 12px;
+  transition: background 0.25s;
+}
+
+.security-card .toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background: var(--contrast-color);
+  border-radius: 50%;
+  transition: left 0.25s;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+.security-card .toggle input:checked + .toggle-slider { background: var(--accent-color); }
+.security-card .toggle input:checked + .toggle-slider:before { left: 23px; }
+
+.security-card .info-row {
+  padding: 16px 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--default-color), transparent 92%);
+}
+
+.security-card .btn-submit {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  background-color: var(--accent-color);
+  border: none;
+  color: var(--contrast-color);
+  font-family: var(--nav-font);
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 28px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+
+.security-card .btn-submit:hover {
+  background-color: color-mix(in srgb, var(--accent-color), transparent 20%);
+  color: var(--contrast-color);
+}
+
+.security-card .card-footer {
+  text-align: center;
+  margin-top: 24px;
+  font-family: var(--nav-font);
+  font-size: 13px;
+  color: color-mix(in srgb, var(--default-color), transparent 40%);
+}
+
+.security-card .card-footer a {
+  color: var(--accent-color);
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.security-card .card-footer a:hover {
+  color: color-mix(in srgb, var(--accent-color), transparent 25%);
+  text-decoration: underline;
+}
+
+.security-card .messages { margin-bottom: 24px; }
+
+.security-card .message {
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  font-family: var(--nav-font);
+  font-size: 13px;
+  border-radius: 4px;
+}
+
+.security-card .message.success {
+  background: color-mix(in srgb, var(--accent-color), transparent 90%);
+  color: var(--accent-color);
+  border-left: 3px solid var(--accent-color);
+}
+
+.security-card .message.error {
+  background: rgba(223, 21, 41, 0.08);
+  color: #df1529;
+  border-left: 3px solid #df1529;
+}
+
+/*--------------------------------------------------------------
+# Notifications Page
+--------------------------------------------------------------*/
+.notifications-card {
+  background: var(--surface-color);
+  border: 1px solid color-mix(in srgb, var(--default-color), transparent 88%);
+  width: 100%;
+  max-width: 480px;
+  padding: 48px 44px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.07);
+  border-radius: 4px;
+}
+
+.notifications-card .card-icon {
+  width: 52px;
+  height: 52px;
+  background-color: var(--accent-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-bottom: 24px;
+  color: var(--contrast-color);
+}
+
+.notifications-card .card-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--heading-color);
+  font-family: var(--heading-font);
+  margin-bottom: 6px;
+}
+
+.notifications-card .card-subtitle {
+  font-family: var(--nav-font);
+  font-size: 13px;
+  color: color-mix(in srgb, var(--default-color), transparent 35%);
+  margin-bottom: 32px;
+}
+
+.notifications-card .divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.notifications-card .divider-line {
+  flex: 1;
+  height: 1px;
+  background: color-mix(in srgb, var(--default-color), transparent 88%);
+}
+
+.notifications-card .divider-text {
+  font-family: var(--nav-font);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent-color);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.notifications-card .toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--default-color), transparent 92%);
+}
+
+.notifications-card .toggle-row.last {
+  border-bottom: none;
+}
+
+.notifications-card .toggle-info {
+  flex: 1;
+  padding-right: 20px;
+}
+
+.notifications-card .toggle-label {
+  font-size: 16px;
+  font-family: var(--default-font);
+  color: var(--heading-color);
+  font-weight: 500;
+  margin-bottom: 3px;
+}
+
+.notifications-card .toggle-desc {
+  font-family: var(--nav-font);
+  font-size: 12px;
+  color: color-mix(in srgb, var(--default-color), transparent 40%);
+}
+
+.notifications-card .toggle {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.notifications-card .toggle input { opacity: 0; width: 0; height: 0; }
+
+.notifications-card .toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: color-mix(in srgb, var(--default-color), transparent 75%);
+  border-radius: 12px;
+  transition: background 0.25s;
+}
+
+.notifications-card .toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background: var(--contrast-color);
+  border-radius: 50%;
+  transition: left 0.25s;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+.notifications-card .toggle input:checked + .toggle-slider { background: var(--accent-color); }
+.notifications-card .toggle input:checked + .toggle-slider:before { left: 23px; }
+
+.notifications-card .btn-submit {
+  width: 100%;
+  padding: 14px;
+  background-color: var(--accent-color);
+  border: none;
+  color: var(--contrast-color);
+  font-family: var(--nav-font);
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 32px;
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+
+.notifications-card .btn-submit:hover {
+  background-color: color-mix(in srgb, var(--accent-color), transparent 20%);
+}
+
+.notifications-card .card-footer {
+  text-align: center;
+  margin-top: 24px;
+  font-family: var(--nav-font);
+  font-size: 13px;
+  color: color-mix(in srgb, var(--default-color), transparent 40%);
+}
+
+.notifications-card .card-footer a {
+  color: var(--accent-color);
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.notifications-card .card-footer a:hover {
+  color: color-mix(in srgb, var(--accent-color), transparent 25%);
+  text-decoration: underline;
+}
+
+.notifications-card .messages { margin-bottom: 24px; }
+
+.notifications-card .message {
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  font-family: var(--nav-font);
+  font-size: 13px;
+  border-radius: 4px;
+}
+
+.notifications-card .message.success {
+  background: color-mix(in srgb, var(--accent-color), transparent 90%);
+  color: var(--accent-color);
+  border-left: 3px solid var(--accent-color);
+}
+
+.notifications-card .message.error {
+  background: rgba(223, 21, 41, 0.08);
+  color: #df1529;
+  border-left: 3px solid #df1529;
+}

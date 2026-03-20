@@ -11,8 +11,7 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django_daraja.mpesa.core import MpesaClient
-from .models import Order, OrderItem
-
+from .models import Order, OrderItem, Profile
 
 from .cart import Cart
 from .models import OrderList, PasswordReset, Checkout, Product, Category
@@ -186,8 +185,6 @@ def reset_password(request , reset_id):
         return render(request, "reset_password.html")
 
 
-def account(request):
-    return render(request, 'account.html')
 
 def order_list(request):
     return render(request, 'order_list.html')
@@ -415,3 +412,73 @@ def cart_remove(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     cart.remove(product)
     return redirect('cart_detail')
+
+
+@login_required(login_url='/login/')
+def account(request):
+    profile, created = Profile.objects.get_or_create(user=request.user)
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        # handle actions here, e.g.:
+        if action == 'update':
+            # process form data
+            pass
+        return redirect('account')
+
+    return render(request, 'account.html', {'profile': profile})
+
+
+@login_required(login_url='/login/')
+def security(request):
+    profile, created = Profile.objects.get_or_create(user=request.user)
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+
+        if action == 'toggle_2fa':
+            profile.two_factor = 'two_factor' in request.POST
+            profile.save()
+            status = "enabled" if profile.two_factor else "disabled"
+            messages.success(request, f"Two-factor authentication {status}.")
+
+        elif action == 'toggle_notifications':
+            profile.notifications = 'notifications' in request.POST
+            profile.save()
+            status = "enabled" if profile.notifications else "disabled"
+            messages.success(request, f"Email notifications {status}.")
+
+        return redirect('security')
+
+    return render(request, 'security.html', {'profile': profile})
+
+@login_required(login_url='/login/')
+def notifications(request):
+    profile, created = Profile.objects.get_or_create(user=request.user)
+
+    if request.method == 'POST':
+        profile.notifications = 'notifications' in request.POST
+        profile.order_updates = 'order_updates' in request.POST
+        profile.promotions = 'promotions' in request.POST
+        profile.restocks = 'restocks' in request.POST
+        profile.newsletter = 'newsletter' in request.POST
+        profile.save()
+        messages.success(request, 'Notification preferences saved.')
+        return redirect('notifications')
+
+    return render(request, 'notifications.html', {'profile': profile})
+
+
+@login_required(login_url='/login/')
+def history(request):
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+    total_spent = sum(o.total_amount for o in orders)
+    paid_count = orders.filter(status='paid').count()
+    pending_count = orders.filter(status='pending').count()
+
+    return render(request, 'history.html', {
+        'orders': orders,
+        'total_spent': total_spent,
+        'paid_count': paid_count,
+        'pending_count': pending_count,
+    })
