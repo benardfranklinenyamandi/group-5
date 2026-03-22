@@ -108,7 +108,7 @@
       </p>
     </div>
     <a href="{% url 'product_list' %}"
-       class="btn btn-outline-dark btn-sm">
+       class="btn btn-outline-primary btn-sm">
       View All
     </a>
   </div>
@@ -135,7 +135,7 @@
             {% endif %}
           </div>
 
-          <h6 class="fw-bold text-dark mb-1 small">
+          <h6 class="fw-bold text-primary mb-1 small">
             {{ category.name }}
           </h6>
           <small class="text-muted">
@@ -144,7 +144,7 @@
           </small>
 
           <div class="mt-2">
-            <span class="btn btn-dark btn-sm w-100" style="font-size: 11px;">
+            <span class="btn btn-primary btn-sm w-100" style="font-size: 11px;">
               Shop Now
             </span>
           </div>
@@ -172,14 +172,14 @@
       </p>
     </div>
     <a href="{% url 'product_list' %}"
-       class="btn btn-outline-dark btn-sm">
+       class="btn btn-outline-primary btn-sm">
       See All Products
     </a>
   </div>
 
   <div class="row row-cols-1 row-cols-md-4 g-4">
     {% for product in featured_products %}
-    <div class="col">
+    <div class="col-3">
       <div class="card h-100 border-0 shadow-sm"
            style="transition: transform 0.2s;"
            onmouseover="this.style.transform='translateY(-5px)'"
@@ -203,7 +203,7 @@
 
         <div class="card-body pb-0">
           <!-- Category Badge -->
-          <span class="badge bg-light text-dark border mb-2 small">
+          <span class="badge bg-light text-primary border mb-2 small">
             {{ product.category.name }}
           </span>
           <!-- Product Name -->
@@ -232,7 +232,7 @@
           <!-- Buttons -->
           <div class="d-grid gap-2">
             <a href="{% url 'product_detail' product.slug %}"
-               class="btn btn-dark btn-sm">
+               class="btn btn-primary btn-sm">
               View Details
             </a>
           </div>

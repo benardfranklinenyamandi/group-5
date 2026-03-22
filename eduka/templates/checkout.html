@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="row justify-content-center">
-  <div class="col-md-6">
+  <div class="col-md-7">
 
     <h2 class="mb-4">Checkout</h2>
 
@@ -17,8 +17,7 @@
     {% endif %}
 
     <!-- Order Summary -->
-    <div class="shadow">
-    <div class="card mb-4 border-0 shadow-sm">
+    <div class="card mb-4 border-0 shadow">
       <div class="card-header bg-primary text-white fw-bold">
         Order Summary
       </div>
@@ -39,53 +38,161 @@
         </div>
       </div>
     </div>
+
+    <!-- Payment Method Tabs -->
+    <div class="card border-0 shadow">
+      <div class="card-header bg-white">
+        <ul class="nav nav-tabs card-header-tabs" id="paymentTabs">
+          <li class="nav-item">
+            <a class="nav-link active fw-bold"
+               id="mpesa-tab"
+               href="#mpesa"
+               onclick="showTab('mpesa')">
+              <i class="fa-solid fa-mobile-screen"></i> Pay with Mpesa
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-bold"
+               id="cod-tab"
+               href="#cod"
+               onclick="showTab('cod')">
+              <i class="fa-solid fa-truck-fast fa-flip"></i> Cash on Delivery
+            </a>
+          </li>
+        </ul>
       </div>
 
-    <!-- Mpesa Payment Form -->
-    <div class="shadow mb-4">
-    <div class="card border-0 shadow-sm">
-      <div class="card-header bg-success text-white fw-bold">
-        Pay with Mpesa
-      </div>
       <div class="card-body">
-        <p class="text-muted small mb-3">
-          Enter your Safaricom number below. You will receive
-          a prompt on your phone to confirm payment.
-        </p>
 
-        <form method="POST" action="{% url 'initiate_payment' %}">
-          {% csrf_token %}
+        <!-- Mpesa Tab -->
+        <div id="mpesa" class="payment-tab">
+          <p class="text-muted small mb-3">
+            Enter your Safaricom number. You will receive a
+            prompt on your phone to confirm payment.
+          </p>
 
-          <div class="mb-3">
-            <label class="form-label fw-bold">Safaricom Phone Number</label>
-            <div class="input-group">
-              <span class="input-group-text bg-success text-white">+254</span>
-              <input type="tel"
-                     name="phone"
-                     class="form-control form-control-lg"
-                     placeholder="07XXXXXXXX"
-                     required>
+          <form method="POST" action="{% url 'initiate_payment' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label class="form-label fw-bold">
+                Safaricom Phone Number
+              </label>
+              <div class="input-group">
+                <span class="input-group-text bg-success text-white">
+                  +254
+                </span>
+                <input type="tel"
+                       name="phone"
+                       class="form-control form-control-lg"
+                       placeholder="07XXXXXXXX"
+                       required>
+              </div>
+              <small class="text-muted">
+                Enter full number e.g. 0712345678
+              </small>
             </div>
-            <small class="text-muted">
-              Enter full number e.g. 0712345678
-            </small>
-          </div>
-
-          <button type="submit" class="btn btn-success btn-lg w-100 fw-bold">
-            Pay KSh {{ total }} via Mpesa
-          </button>
-
-        </form>
-
-        <div class="text-center mt-3">
-          <a href="{% url 'cart_detail' %}" class="text-muted small">
-            Back to Cart
-          </a>
+            <button type="submit"
+                    class="btn btn-success btn-lg w-100 fw-bold">
+              Pay KSh {{ total }} via Mpesa
+            </button>
+          </form>
         </div>
+
+        <!-- Cash on Delivery Tab -->
+        <div id="cod" class="payment-tab d-none">
+          <p class="text-muted small mb-3">
+            Fill in your delivery details. You will pay cash
+            when your order arrives.
+          </p>
+
+          <form method="POST" action="{% url 'cash_on_delivery' %}">
+            {% csrf_token %}
+
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label fw-bold">Full Name</label>
+                <input type="text"
+                       name="full_name"
+                       class="form-control"
+                       placeholder="John Doe"
+                       required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold">Email</label>
+                <input type="email"
+                       name="email"
+                       class="form-control"
+                       placeholder="john@email.com"
+                       required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold">Phone Number</label>
+                <input type="tel"
+                       name="phone"
+                       class="form-control"
+                       placeholder="0712345678"
+                       required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold">City / Town</label>
+                <input type="text"
+                       name="city"
+                       class="form-control"
+                       placeholder="Nairobi"
+                       required>
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-bold">
+                  Delivery Address
+                </label>
+                <textarea name="address"
+                          class="form-control"
+                          rows="3"
+                          placeholder="Street, Building, Estate..."
+                          required></textarea>
+              </div>
+            </div>
+
+            <!-- Order Total -->
+            <div class="alert alert-warning mt-3">
+              <div class="d-flex justify-content-between fw-bold">
+                <span>Amount to pay on delivery:</span>
+                <span>KSh {{ total }}</span>
+              </div>
+            </div>
+
+            <button type="submit"
+                    class="btn btn-primary btn-lg w-100 fw-bold">
+              Place Order - Pay on Delivery
+            </button>
+
+          </form>
+        </div>
+
       </div>
+    </div>
+
+    <div class="text-center mt-3">
+      <a href="{% url 'cart_detail' %}" class="text-muted small">
+        Back to Cart
+      </a>
     </div>
 
   </div>
-    </div>
 </div>
+
+<script>
+function showTab(tab) {
+  document.querySelectorAll('.payment-tab').forEach(function(el) {
+    el.classList.add('d-none')
+  })
+  document.getElementById(tab).classList.remove('d-none')
+  document.querySelectorAll('.nav-link').forEach(function(el) {
+    el.classList.remove('active')
+  })
+  document.getElementById(tab + '-tab').classList.add('active')
+  return false
+}
+</script>
+
 {% endblock %}
