@@ -305,6 +305,68 @@ def initiate_payment(request):
 
     return redirect('checkout')
 
+# Cash on Delivery
+def cash_on_delivery(request):
+    if request.method == 'POST':
+        cart = Cart(request)
+        total = cart.get_total()
+
+        # Get form details
+        full_name = request.POST.get('full_name')
+        email     = request.POST.get('email')
+        phone     = request.POST.get('phone')
+        address   = request.POST.get('address')
+        city      = request.POST.get('city')
+
+        # Validate
+        if not all([full_name, email, phone, address, city]):
+            messages.error(request, 'Please fill in all fields')
+            return redirect('checkout')
+
+        # Create order
+        order = Order.objects.create(
+            user         = request.user if request.user.is_authenticated else None,
+            total_amount = total,
+            phone_number = phone,
+            status       = 'pending',
+        )
+
+        # Save order items
+        for item in cart:
+            OrderItem.objects.create(
+                order    = order,
+                product  = item['product'],
+                quantity = item['quantity'],
+                price    = item['price'],
+            )
+
+        # Save checkout details
+        Checkout.objects.create(
+            full_name      = full_name,
+            email          = email,
+            phone          = phone,
+            address        = address,
+            city           = city,
+            product_name   = f'Order #{order.id}',
+            quantity       = len(cart),
+            total_price    = total,
+            payment_method = 'Cash on Delivery',
+        )
+
+        # Clear cart
+        if 'cart' in request.session:
+            del request.session['cart']
+
+        messages.success(request, f'Order #{order.id} placed successfully! Pay on delivery.')
+        return redirect('cod_success', order_id=order.id)
+
+    return redirect('checkout')
+
+
+def cod_success(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    return render(request, 'cod_success.html', {'order': order})
+
 def order_pending(request, order_id):
     order = get_object_or_404(Order, id=order_id)
 
@@ -482,3 +544,4 @@ def history(request):
         'paid_count': paid_count,
         'pending_count': pending_count,
     })
+

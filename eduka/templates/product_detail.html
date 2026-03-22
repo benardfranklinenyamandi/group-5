@@ -3,7 +3,7 @@
 {% block title %}{{ product.name }}{% endblock %}
 
 {% block content %}
-
+<div style="padding:10px">
   <nav aria-label="breadcrumb" class="mb-4">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="{% url 'product_list' %}">Products</a></li>
@@ -61,7 +61,7 @@
     <input type="number" name="quantity" value="1" min="1"
            max="{{ product.stock }}"
            class="form-control" style="width: 80px;">
-    <button type="submit" class="btn btn-dark btn-lg">Add to Cart</button>
+    <button type="submit" class="btn btn-primary btn-lg">Add to Cart</button>
   </div>
 </form>
 
@@ -70,6 +70,7 @@
       </a>
     </div>
 
+  </div>
   </div>
 
 {% endblock %}

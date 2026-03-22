@@ -45,5 +45,8 @@ urlpatterns = [
     path('initiate-payment/', views.initiate_payment, name='initiate_payment'),
     path('order-pending/<int:order_id>/', views.order_pending, name='order_pending'),
 
+    path('cash-on-delivery/', views.cash_on_delivery, name='cash_on_delivery'),
+    path('cod-success/<int:order_id>/', views.cod_success, name='cod_success'),
+
 ]
 
