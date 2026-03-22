@@ -19,7 +19,7 @@ from .models import OrderList, PasswordReset, Checkout, Product, Category
 # Create your views here.
 
 def index(request):
-    featured_products = Product.objects.filter(available=True)[:8]
+    featured_products = Product.objects.filter(available=True)[:12]
     categories = Category.objects.all()
     total_products = Product.objects.filter(available=True).count()
     total_categories = Category.objects.count()
